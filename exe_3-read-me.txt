@@ -1,0 +1,106 @@
+O problema de usar scanf, getchar, getc e fgetc para receber caracteres em C
+
+"Ora, é só declarar duas variáveis char e usar a scanf duas vezes, uma para cada variável", é que você deve ter pensado para criar o tal programa.
+
+Vamos fazer isso então, e ver o resultado:
+
+#include <stdio.h>
+
+int main()
+{
+    char letra1, letra2;
+
+    printf("Insira um caractere: ");
+    scanf("%c",&letra1);
+
+    printf("Insira outro caractere: ");
+    scanf("%c",&letra2);
+
+    printf("Você digitou: '%c' e '%c'", letra1, letra2);
+}
+
+
+Eu digitei 'C' (a melhor letra do alfabeto), dei enter, e antes de digitar a próxima letra o progarma terminou, exibindo a seguinte mensagem:
+"Você digitou: 'C' e '
+'"
+
+Nossa! Estranho, não? Será que hackeamos a linguagem C e descobrimos uma falha?
+Não ;)
+
+Note que digitei 'C' e enter...mas enter também é uma tecla, e é representada por '\n', lembra?
+Ou seja, o C entendeu que nossa segunda letra era o enter!
+
+A solução para isso é bem simples.
+Na função scanf, dê um espaço entre a aspa " e o símbolo %c.
+Nosso código fica assim:
+
+#include <stdio.h>
+
+int main()
+{
+    char letra1, letra2;
+
+    printf("Insira um caractere: ");
+    scanf("%c",&letra1);
+
+    printf("Insira outro caractere: ");
+    scanf(" %c",&letra2);
+
+    printf("Você digitou: '%c' e '%c'", letra1, letra2);
+}
+
+
+
+
+Pronto! Agora funciona perfeitamente!
+Pois esse simples espaço é um comando para o C desconsiderar o enter, tab ou espaço em branco.
+Sim, precisa nem dar enter. Tente aí digitar uma letra, dar espaço (ou tab) e a outra.
+
+Ok, mas só é possível fazer isso na scanf().
+E na getchar(), getc() e fgetc()?
+
+Limpando o buffer em C: fflush e __fpurge
+Ainda no primeiro exemplo desse artigo ( o que dá problema ), digitamos a letra 'C', que é armazenada na variável 'letra1' e em seguida apertamos enter.
+Esse caractere (enter), ficará armazenado no buffer do teclado (um memória temporária).
+
+Em seguida, noss programa em C pede para que algo seja armazenado na variável 'letra2'.
+Porém, antes do C receber um novo dado do usuário, ele checa se não tem mais alguma coisa armazenada no teclado (ele sempre faz isso...fez antes, para pegar a letra 'C'). E lá tem um caractere sim, o enter.
+
+Então o programa pega esse caractere e o coloca na variável letra2, e é por isso que aparece uma quebra de linha em nosso programa.
+
+Portanto, uma alternativa, caso não queria usar o espaço entre " e o %c na scanf, é limpar o buffer após cada scanf(), getchar(), getc() ou fgetc().
+
+Para limpar o buffer em Windows, use: fflush(stdin)
+Para limpar o buffer em Linux, use: __fpurge(stdin)
+
+Veja como fica nosso programa original, funcionando do jeito que queríamos:
+
+
+#include <stdio.h>
+
+int main()
+{
+    char letra1, letra2;
+
+    printf("Insira um caractere: ");
+    scanf("%c", &letra1);
+
+    fflush(stdin);
+    __fpurge(stdin);
+
+    printf("Insira outro caractere: ");
+    scanf("%c", &letra2);
+
+    printf("Você digitou: '%c' e '%c'", letra1, letra2);
+}
+
+
+
+Fica ao seu dispor escolher como vai ser.
+E se habitue com essas coisas, em C há várias maneiras de se fazer várias coisas. Muitas vezes, porém, a solução que usamos não é muito segura ou portável, mas é a mais simples.
+
+Limpar o buffer, por exemplo, nem sempre é algo desejável, e para programação mais profissional e segura não é recomendado que se use fflush por exemplo.
+
+Mas para quem está  começando, não há problema algum ficar limpando o buffer após cada scanf, e o  scanf (embora seja arriscado e não indicado em alguns casos) é o mais usado.
+
+Por isso, usaremos bastante o scanf ao longo de nosso curso de C.
