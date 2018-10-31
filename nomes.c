@@ -49,30 +49,40 @@ void ordenar(structPessoa p[],  int t)
 {
 
 	int i;
+	while(1)
+	{
+		int flag = 0;
 
-		for(i = 0; i < t; i++)
+
+		for(i = 0; i < t-1; i++)
 		{
 
 			if(strcmp(p[i].nome, p[i+1].nome) > 0)
+				{
+					flag = 1;
+					structPessoa temp;
+					strcpy(temp.nome, p[i].nome);
+					strcpy(temp.telefone, p[i].telefone);
+					strcpy(temp.endereco, p[i].endereco); 
+				
+					strcpy(p[i].nome, p[i+1].nome);
+					strcpy(p[i].telefone, p[i+1].telefone);
+					strcpy(p[i].endereco,  p[i+1].telefone); 
+				
+					strcpy(p[i+1].nome, temp.nome);
+					strcpy(p[i+1].telefone, temp.telefone);
+					strcpy(p[i+1].telefone, temp.endereco); 			
+				}//End if	
+	
+		}//End for
+		
+			if(flag = 0)
 			{
-				structPessoa temp;
-				strcpy(temp.nome, p[i].nome);
-				strcpy(temp.telefone, p[i].telefone);
-				strcpy(temp.endereco, p[i].endereco); 
-				
-				strcpy(p[i].nome, p[i+1].nome);
-				strcpy(p[i].telefone, p[i+1].telefone);
-				strcpy(p[i].endereco,  p[i+1].telefone); 
-				
-				strcpy(p[i+1].nome, temp.nome);
-				strcpy(p[i+1].telefone, temp.telefone);
-				strcpy(p[i+1].telefone, temp.endereco); 
-				
+			 break;
 			}
-				
-		}
 
-}
+	}//End while
+}//End func
 
 
 
@@ -83,32 +93,26 @@ void ordenar(structPessoa p[],  int t)
 
 int main(){
 
-	int tam=3, i;
+	int tam=3, a;
 	structPessoa pessoas[tam];
 
 
 		//RECEBE
-		for(i = 0; i < tam; i++)
+		for(a = 0; a < tam; a++)
 		{
-			pessoas[i] = recebePessoa();
+			pessoas[a] = recebePessoa();
 
 		}
-
 		
 
-
-			
 		//Ordenar
 		ordenar(pessoas, tam);
-
-
 		
 
-
 		//IMPRIME
-		for(i = 0; i<tam; i++)
+		for(a = 0; a<tam; a++)
 		{
-			impPessoa(pessoas[i]);
+			impPessoa(pessoas[a]);
 
 		}
 
